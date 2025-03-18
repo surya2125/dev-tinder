@@ -1,0 +1,24 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@theme {
+    --font-inter: "Inter", sans-serif;
+}
+
+html {
+    @apply font-inter;
+}
+
+#root {
+    @apply flex flex-col min-h-screen;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
