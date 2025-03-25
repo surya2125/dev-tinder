@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router";
 import { Toaster } from "react-hot-toast";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import Header from "./Common/Header";
+import Footer from "./Common/Footer";
 import { useDispatch } from "react-redux";
 import { AxiosError } from "axios";
 import { axiosInstance } from "../utils/axiosInstance";
 import { addUser } from "../store/slices/userSlice";
-import Loader from "./Loader";
+import Loader from "./Common/Loader";
 
 const Body = () => {
     const dispatch = useDispatch();
@@ -39,7 +39,7 @@ const Body = () => {
 
     return (
         <>
-            <Navbar />
+            <Header />
             <Outlet />
             <Footer />
             <Toaster />

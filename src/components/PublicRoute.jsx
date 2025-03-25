@@ -6,7 +6,7 @@ const PublicRoute = ({ children }) => {
     if (user) {
         return (
             <Navigate
-                to="/"
+                to="/feed"
                 replace
             />
         );

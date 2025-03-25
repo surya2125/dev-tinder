@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginSchema } from "../schemas/authSchema";
-import ToolTipMessage from "../components/ToolTipMessage";
+import ToolTipMessage from "../components/Common/ToolTipMessage";
 import toast from "react-hot-toast";
 import { AxiosError } from "axios";
 import { axiosInstance } from "../utils/axiosInstance";
@@ -24,11 +24,7 @@ const Login = () => {
         reset
     } = useForm({
         resolver: yupResolver(LoginSchema),
-        mode: "onChange",
-        defaultValues: {
-            email: "",
-            password: ""
-        }
+        mode: "onChange"
     });
     const [showPassword, setShowPassword] = useState("");
 
@@ -55,8 +51,16 @@ const Login = () => {
     };
 
     return (
-        <div className="flex flex-col justify-center items-center my-14">
-            <div className="card bg-base-300 w-96 shadow-xl">
+        <div className="h-full flex gap-10 items-center justify-center flex-1 container mx-auto">
+            <div>
+                <img
+                    src="/assets/login.jpg"
+                    className="block mx-auto w-[448px] rounded-xl"
+                    loading="lazy"
+                    alt="login-img"
+                />
+            </div>
+            <div className="max-w-md w-full">
                 <h2 className="card-title justify-center text-2xl mt-8">Login to your Account</h2>
                 <form
                     noValidate

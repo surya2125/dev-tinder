@@ -6,6 +6,7 @@ const ConnectionCard = ({ connection }) => {
                 src={photoUrl}
                 className="w-16 h-16 rounded-full"
                 alt="photo"
+                loading="lazy"
             />
             <div className="text-left space-y-1">
                 <h3 className="font-semibold">{name}</h3>

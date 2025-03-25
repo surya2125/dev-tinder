@@ -26,16 +26,18 @@ const Feed = () => {
         getFeed();
     }, []);
 
-    if (!feed || feed?.length === 0) return <h2 className="text-center my-10 font-bold text-3xl">No New Users Found!</h2>;
+    if (!feed || feed?.length === 0) return <h2 className="text-center my-32 font-bold text-3xl">No New Users Found!</h2>;
 
     return (
-        <div className="container mx-auto flex flex-wrap items-center justify-center gap-10 my-10">
-            {feed?.map((user) => (
-                <UserCard
-                    key={user?._id}
-                    user={user}
-                />
-            ))}
+        <div className="flex-1 relative overflow-hidden">
+            <div className="w-96 mx-auto max-w-full my-32">
+                {feed?.map((user) => (
+                    <UserCard
+                        key={user._id}
+                        user={user}
+                    />
+                ))}
+            </div>
         </div>
     );
 };
