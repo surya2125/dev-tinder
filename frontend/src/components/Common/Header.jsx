@@ -18,12 +18,12 @@ const Header = () => {
         try {
             const response = await axiosInstance.post("/auth/logout");
             if (response.data.success) {
-                toast.success(response.data.message);
                 dispatch(clearUser());
                 dispatch(clearFeed());
                 dispatch(clearConnections());
                 dispatch(clearRequests());
-                navigate("/");
+                navigate("/login", { replace: true });
+                toast.success(response.data.message);
             }
         } catch (err) {
             toast.error(err.message);
