@@ -4,8 +4,8 @@
     "description": "this is tinder for developers",
     "main": "index.js",
     "scripts": {
-        "start": "node --env-file=.env src/index.js",
-        "dev": "nodemon --env-file=.env src/index.js"
+        "start": "node src/index.js",
+        "dev": "nodemon src/index.js"
     },
     "keywords": [
         "nodejs",
@@ -19,6 +19,7 @@
         "bcrypt": "^5.1.1",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.5",
+        "dotenv": "^16.4.7",
         "express": "^4.21.2",
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^8.10.2",
@@ -29,4 +30,3 @@
         "prettier": "^3.5.2"
     }
 }
-
