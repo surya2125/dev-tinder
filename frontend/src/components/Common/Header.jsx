@@ -23,7 +23,7 @@ const Header = () => {
                 dispatch(clearFeed());
                 dispatch(clearConnections());
                 dispatch(clearRequests());
-                navigate("/login");
+                navigate("/");
             }
         } catch (err) {
             toast.error(err.message);

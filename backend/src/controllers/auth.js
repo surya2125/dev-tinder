@@ -78,10 +78,17 @@ const Login = AsyncHandler(async (req, res, next) => {
 // Logout
 const Logout = (req, res) => {
     // Remove the cookies and return the response
-    res.clearCookie("token").status(200).json({
-        success: true,
-        message: "Logged out successfully"
-    });
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: "/"
+    })
+        .status(200)
+        .json({
+            success: true,
+            message: "Logged out successfully"
+        });
 };
 
 module.exports = { Signup, Login, Logout };
