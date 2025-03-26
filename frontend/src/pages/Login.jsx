@@ -51,7 +51,7 @@ const Login = () => {
     };
 
     return (
-        <div className="h-full flex gap-10 items-center justify-center flex-1 container mx-auto">
+        <div className="h-full flex gap-10 items-center justify-center flex-1 my-14 mx-5">
             <div>
                 <img
                     src="/assets/login.jpg"
