@@ -21,6 +21,12 @@ app.use(
     })
 );
 
+app.use("/", (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "Welcome to devtinder backend !!!"
+    });
+});
 app.use("/api/auth", authRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/request", requestRouter);
