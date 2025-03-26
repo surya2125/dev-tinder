@@ -21,7 +21,7 @@ app.use(
     })
 );
 
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
     res.status(200).json({
         success: true,
         message: "Welcome to devtinder backend !!!"
