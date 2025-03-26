@@ -45,7 +45,7 @@ const Header = () => {
                 </div>
                 {user ? (
                     <div className="flex items-center gap-4 text-sm">
-                        <p>
+                        <p className="sm:block hidden">
                             Welcome, <b>{user?.name}</b>
                         </p>
 

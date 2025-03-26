@@ -4,8 +4,8 @@ import { FiZap } from "react-icons/fi";
 
 const AboutSection = () => {
     return (
-        <section className="py-16">
-            <div className="container px-4 md:px-6">
+        <section className="md:py-16">
+            <div className="container mx-auto">
                 <div className="flex flex-col items-center justify-center space-y-4 text-center">
                     <div className="space-y-2">
                         <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Why DevTinder?</h2>

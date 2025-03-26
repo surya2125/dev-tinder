@@ -27,55 +27,48 @@ const UserCard = ({ user }) => {
         }
     };
 
-    const handleSwipe = async (dir, userId) => {
-        let status;
-        if (dir === "right") {
-            status = "interested";
-        } else if (dir === "left") {
-            status = "ignored";
-        }
-        await handleSendRequest(status, userId);
+    const handleSwipe = (dir, userId) => {
+        const status = dir === "right" ? "interested" : "ignored";
+        handleSendRequest(status, userId);
     };
 
     return (
         <TinderCard
+            className="user-card h-full w-full max-w-md mx-auto sm:w-96 overflow-hidden border border-gray-200 rounded-lg cursor-grab active:cursor-grab"
             key={_id}
-            className="absolute shadow-none"
             onSwipe={(dir) => handleSwipe(dir, _id)}
             swipeRequirementType="position"
             swipeThreshold={100}
             preventSwipe={["up", "down"]}>
-            <div
-                style={{ gridColumns: 1, gridRows: 1 }}
-                className="card bg-white w-96 h-full select-none rounded-lg overflow-hidden border border-gray-200 pointer-events-none">
-                <img
-                    src={photoUrl}
-                    draggable="false"
-                    className="h-[70%] w-full rounded-t-lg touch-none select-none"
-                    alt="user"
-                    loading="lazy"
-                />
-                <div className="p-4 bg-base-200 flex flex-col justify-between flex-1">
-                    <h2 className="card-title text-lg font-semibold">{name}</h2>
-                    {age || gender ? (
-                        <p className="text-sm text-gray-600">
-                            {age ? `${age} years old` : ""}
-                            {age && gender ? ", " : ""}
-                            {gender || ""}
-                        </p>
-                    ) : (
-                        <p className="text-sm text-gray-400 mb-2">Age/Gender not available</p>
-                    )}
-                    <p className="text-gray-300 text-sm mt-3">{truncateString(about, 50) || "No description available"}</p>
-                    <div className="card-actions justify-between space-x-2 mt-4">
+            <div className="card h-full flex flex-col">
+                <div className="aspect-square w-full relative">
+                    <img
+                        src={photoUrl}
+                        draggable="false"
+                        loading="lazy"
+                        className="absolute inset-0 w-full h-full object-cover rounded-t-lg"
+                        alt="user"
+                    />
+                </div>
+                <div className="p-4 bg-base-200 flex flex-col justify-between flex-grow">
+                    <div>
+                        <h2 className="card-title text-lg sm:text-xl font-semibold mb-2">{name}</h2>
+                        {age && gender ? (
+                            <p className="text-sm sm:text-base text-gray-600 mb-2">{age + ", " + gender}</p>
+                        ) : (
+                            <p className="text-sm sm:text-base text-gray-400 mb-2">Age/Gender not available</p>
+                        )}
+                        <p className="text-gray-300 text-sm sm:text-base mt-3">{truncateString(about, 50) || "No description available"}</p>
+                    </div>
+                    <div className="card-actions flex justify-between space-x-2 mt-4">
                         <button
                             onClick={() => handleSendRequest("ignored", _id)}
-                            className="btn btn-error">
+                            className="btn btn-error btn-sm sm:btn-md flex-1">
                             Ignore
                         </button>
                         <button
                             onClick={() => handleSendRequest("interested", _id)}
-                            className="btn btn-primary">
+                            className="btn btn-primary btn-sm sm:btn-md flex-1">
                             Interested
                         </button>
                     </div>

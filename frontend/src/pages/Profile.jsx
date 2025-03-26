@@ -8,9 +8,9 @@ const Profile = () => {
     if (!user) return <Loader />;
 
     return (
-        <div className="flex justify-center gap-10 items-center relative my-24">
+        <div className="flex justify-center gap-10 items-center relative my-24 px-3">
             <EditProfile user={user} />
-            <ProfileCard user={user} />
+                <ProfileCard user={user} />
         </div>
     );
 };

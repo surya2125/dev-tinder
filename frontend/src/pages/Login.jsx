@@ -51,8 +51,8 @@ const Login = () => {
     };
 
     return (
-        <div className="h-full flex gap-10 items-center justify-center flex-1 my-14 mx-5">
-            <div>
+        <div className="h-full flex gap-10 items-center justify-center flex-1 sm:my-24">
+            <div className="lg:block hidden">
                 <img
                     src="/assets/login.jpg"
                     className="block mx-auto w-[448px] rounded-xl"
