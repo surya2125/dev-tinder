@@ -26,11 +26,12 @@ const Connections = () => {
         fetchAllConnections();
     }, []);
 
-    if (!connections || connections?.length === 0) return <h2 className="text-3xl font-bold text-center my-32">No Connections Found!</h2>;
+    if (!connections || connections?.length === 0)
+        return <h2 className="sm:text-3xl text-2xl font-bold text-center my-24 sm:my-28 px-3">No Connections Found!</h2>;
 
     return (
-        <div className="text-center my-32 max-w-3xl w-full mx-auto">
-            <h2 className="text-3xl font-bold">My Connections ({connections?.length})</h2>
+        <div className="text-center my-24 sm:my-28 max-w-3xl w-full mx-auto px-3">
+            <h2 className="text-2xl sm:text-3xl font-bold">My Connections ({connections?.length})</h2>
             <div className="space-y-6 mt-8">
                 {connections?.map((connection) => (
                     <ConnectionCard

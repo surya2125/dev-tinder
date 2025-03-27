@@ -22,7 +22,7 @@ const AboutSection = () => {
                         </div>
                         <div className="space-y-2">
                             <h3 className="text-xl font-bold">Skill-Based Matching</h3>
-                            <p className="text-muted-foreground">
+                            <p className="text-muted-foreground sm:text-base text-sm">
                                 Find developers with complementary skills to yours. Perfect for collaborative projects.
                             </p>
                         </div>
@@ -33,7 +33,7 @@ const AboutSection = () => {
                         </div>
                         <div className="space-y-2">
                             <h3 className="text-xl font-bold">Professional Networking</h3>
-                            <p className="text-muted-foreground">
+                            <p className="text-muted-foreground sm:text-base text-sm">
                                 Expand your professional circle with like-minded developers in your field or area of interest.
                             </p>
                         </div>
@@ -44,7 +44,7 @@ const AboutSection = () => {
                         </div>
                         <div className="space-y-2">
                             <h3 className="text-xl font-bold">Quick Connections</h3>
-                            <p className="text-muted-foreground">
+                            <p className="text-muted-foreground sm:text-base text-sm">
                                 Our intuitive swiping interface makes finding the right connection fast and efficient.
                             </p>
                         </div>
