@@ -24,20 +24,29 @@ const Feed = () => {
 
     useEffect(() => {
         getFeed();
-    }, []);
-
-    if (!feed || feed?.length === 0) return <h2 className="sm:text-3xl text-2xl font-bold text-center my-24 sm:my-28 px-3">No New Users Found!</h2>;
+    }, [dispatch]);
 
     return (
-        <div className="px-5 pt-24 pb-10 flex items-center justify-center flex-1 overflow-hidden">
-            <div className="grid place-items-center">
-                {feed?.map((user) => (
-                    <UserCard
-                        key={user._id}
-                        user={user}
+        <div className="flex-1 pt-24 px-5 pb-10 flex flex-col items-center justify-center overflow-hidden">
+            {feed?.length === 0 ? (
+                <div className="text-center">
+                    <h2 className="sm:text-3xl text-2xl font-bold">No New Users Found!</h2>
+                    <img
+                        src="/assets/not-found.svg"
+                        alt="user-not-found"
+                        className="block mx-auto w-96"
                     />
-                ))}
-            </div>
+                </div>
+            ) : (
+                <div className="grid place-items-center">
+                    {feed?.map((user, index) => (
+                        <UserCard
+                            key={index}
+                            user={user}
+                        />
+                    ))}
+                </div>
+            )}
         </div>
     );
 };
