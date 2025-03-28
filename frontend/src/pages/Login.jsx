@@ -37,7 +37,7 @@ const Login = () => {
             if (response.data.success) {
                 toast.success(response.data.message);
                 dispatch(addUser(response.data.data));
-                navigate("/");
+                navigate("/feed", { replace: true });
                 reset();
             }
         } catch (err) {

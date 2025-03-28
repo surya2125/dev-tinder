@@ -33,7 +33,7 @@ const Signup = () => {
             const response = await axiosInstance.post("/auth/signup", data);
             if (response.data.success) {
                 toast.success(response.data.message);
-                navigate("/login");
+                navigate("/login", { replace: true });
                 reset();
             }
         } catch (err) {
