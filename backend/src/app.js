@@ -9,6 +9,7 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
 const healthRouter = require("./routes/health");
+const morgan = require("morgan");
 
 const app = express();
 app.use(express.json());
@@ -20,13 +21,8 @@ app.use(
         origin: FRONTEND_URL
     })
 );
+app.use(morgan("dev"));
 
-app.get("/", (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: "Welcome to devtinder backend !!!"
-    });
-});
 app.use("/api/auth", authRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/request", requestRouter);
