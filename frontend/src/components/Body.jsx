@@ -11,10 +11,11 @@ import { addUser } from "../store/slices/userSlice";
 
 const Body = () => {
     const dispatch = useDispatch();
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const fetchUser = async () => {
         try {
+            setIsLoading(true);
             const response = await axiosInstance.get("/profile/view");
             if (response.data.success) {
                 dispatch(addUser(response.data.data));
@@ -32,7 +33,9 @@ const Body = () => {
         fetchUser();
     }, []);
 
-    if (isLoading) return <Loader />;
+    if (isLoading) {
+        return <Loader />;
+    }
 
     return (
         <>

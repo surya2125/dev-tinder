@@ -16,9 +16,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
     cors({
-        credentials: true,
+        origin: FRONTEND_URL,
         methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-        origin: FRONTEND_URL
+        credentials: true
     })
 );
 app.use(morgan("dev"));
