@@ -1,6 +1,7 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const morgan = require("morgan");
 const { FRONTEND_URL } = require("./config/config");
 const notfoundMiddleware = require("./middlewares/notfound");
 const errorMiddleware = require("./middlewares/error");
@@ -9,7 +10,7 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
 const healthRouter = require("./routes/health");
-const morgan = require("morgan");
+const chatRouter = require("./routes/chat");
 
 const app = express();
 app.use(express.json());
@@ -27,6 +28,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/request", requestRouter);
 app.use("/api/user", userRouter);
+app.use("/api/chat", chatRouter);
 app.use("/api/health", healthRouter);
 
 app.use(errorMiddleware);
