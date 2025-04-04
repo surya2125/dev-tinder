@@ -6,14 +6,12 @@ import { ErrorHandler } from "./handlers.js";
 import { ChatModel } from "../models/chat.js";
 import { MessageModel } from "../models/message.js";
 
-let io;
-
 const getRoomId = (senderId, receiverId) => {
     return crypto.createHash("sha256").update([senderId, receiverId].sort().join("$")).digest("hex").slice(0, 10);
 };
 
 const initializeSocket = (server) => {
-    io = new Server(server, {
+    const io = new Server(server, {
         cors: {
             origin: FRONTEND_URL,
             credentials: true,
@@ -98,4 +96,4 @@ const initializeSocket = (server) => {
     });
 };
 
-export { io, initializeSocket };
+export { initializeSocket };

@@ -1,4 +1,4 @@
-// Get server health status
+// Basic health status
 const basicHealthStatus = (req, res) => {
     // Return the response
     res.status(200).json({
