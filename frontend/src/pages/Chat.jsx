@@ -3,14 +3,18 @@ import { IoMdSend } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { chatSchema } from "../schemas/chatSchema";
-import useGetMessages from "../hooks/useGetMessages";
 import { useGlobalStore } from "../store/useStore";
-import Message from "../components/Chat/Message";
-import useSendMessage from "../hooks/useSendMessage";
-import { useEffect, useRef } from "react";
-import useListenMessages from "../hooks/useListenMessages";
+import useGetMessages from "../hooks/useGetMessages";
+import useConnectSocket from "../hooks/useConnectSocket";
+import Messages from "../components/Chat/Messages";
+import Loader from "../components/Common/Loader";
 
 const Chat = () => {
+    const { user } = useGlobalStore();
+    const { userId } = useParams();
+    useGetMessages(userId);
+    const { socket, isLoading } = useConnectSocket(userId);
+
     const {
         register,
         handleSubmit,
@@ -21,47 +25,28 @@ const Chat = () => {
         mode: "onChange"
     });
 
-    const { userId } = useParams();
-    const { messages } = useGlobalStore();
-    useGetMessages(userId);
-    useListenMessages();
-
-    const lastMessageRef = useRef();
-    useEffect(() => {
-        setTimeout(() => {
-            lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, 100);
-    }, [messages]);
-
-    const { isLoading, handleSendMessage } = useSendMessage(reset, userId);
-
     const handleKeyDown = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault(); // Prevent default behavior (new line)
-            handleSubmit(onSubmit)(); // Submit the form
+            e.preventDefault();
+            handleSubmit(onSubmit)();
         }
     };
 
-    const onSubmit = async ({ message }) => {
-        await handleSendMessage(message);
+    const onSubmit = ({ message }) => {
+        socket?.emit("sendMessage", { senderId: user?._id, receiverId: userId, message });
+        reset();
     };
 
+    if (isLoading) return <Loader />;
+
     return (
-        <div className="mt-10 flex-1  flex items-center justify-center">
-            <div className="bg-base-100 p-3 rounded-md shadow-lg max-w-xl w-full">
-                <div className="pt-4 pb-4 mb-3 px-3 space-y-3 h-[50vh] overflow-y-auto">
-                    {messages?.map((message) => (
-                        <div
-                            key={message._id}
-                            ref={lastMessageRef}>
-                            <Message message={message} />
-                        </div>
-                    ))}
-                </div>
+        <div className="mt-20 mb-10 flex-1 flex items-center justify-center px-3">
+            <div className="bg-base-100 p-2 pb-3 rounded-md shadow-lg max-w-xl w-full">
+                <Messages />
                 <form
                     noValidate
                     onSubmit={handleSubmit(onSubmit)}
-                    className="relative h-[20vh]">
+                    className="relative h-32">
                     <textarea
                         type="text"
                         placeholder="Write a message..."
@@ -69,10 +54,10 @@ const Chat = () => {
                         onKeyDown={handleKeyDown}
                         className="textarea resize-none w-full h-full p-2 sm:p-3 rounded-md border border-gray-300 focus:outline-none focus:border-primary"></textarea>
                     <button
-                        disabled={!isValid || isLoading}
+                        disabled={!isValid}
                         type="submit"
-                        className="btn btn-primary absolute top-3 right-3 px-3">
-                        <IoMdSend className="text-lg sm:text-xl" />
+                        className="btn btn-primary absolute top-3 right-3 text-lg h-8 p-2">
+                        <IoMdSend />
                     </button>
                 </form>
             </div>

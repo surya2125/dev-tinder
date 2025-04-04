@@ -43,14 +43,14 @@ const EditProfile = ({ user }) => {
 
     return (
         <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-                <h2 className="card-title text-2xl">Edit Profile</h2>
-                <p className="text-base-content/70">Update your DevTinder profile information</p>
+            <div className="card-body px-4 sm:px-6">
+                <h2 className="card-title text-xl sm:text-2xl">Edit Profile</h2>
+                <p className="text-base-content/70 text-sm">Update your DevTinder profile information</p>
 
                 <form
                     noValidate
                     onSubmit={handleSubmit(onSubmit)}
-                    className="mt-6 space-y-6">
+                    className="mt-6 space-y-6 text-sm">
                     {/* Name */}
                     <div className="form-control w-full space-y-1">
                         <label className="label">
@@ -115,7 +115,7 @@ const EditProfile = ({ user }) => {
                         <label className="label">
                             <span className="label-text">Gender</span>
                         </label>
-                        <div className="flex flex-col sm:flex-row gap-4">
+                        <div className="flex gap-4">
                             <label className="label cursor-pointer justify-start gap-2">
                                 <input
                                     type="radio"

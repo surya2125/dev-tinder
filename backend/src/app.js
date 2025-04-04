@@ -10,6 +10,8 @@ import requestRouter from "./routes/request.js";
 import userRouter from "./routes/user.js";
 import healthRouter from "./routes/health.js";
 import messageRouter from "./routes/message.js";
+import http from "http";
+import { initializeSocket } from "./utils/socket.js";
 
 const app = express();
 app.use(express.json());
@@ -32,4 +34,6 @@ app.use("/api/message", messageRouter);
 app.use(errorMiddleware);
 app.use("*", notfoundMiddleware);
 
-export default app;
+const server = http.createServer(app);
+initializeSocket(server);
+export { app, server };
