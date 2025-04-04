@@ -1,35 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router";
-import toast from "react-hot-toast";
-import { axiosInstance } from "../../utils/axiosInstance";
-import { clearUser } from "../../store/slices/userSlice";
-import { clearFeed } from "../../store/slices/feedSlice";
-import { clearConnections } from "../../store/slices/connectionSlice";
-import { clearRequests } from "../../store/slices/requestSlice";
+import { Link } from "react-router";
 import { FaCode } from "react-icons/fa";
+import { useGlobalStore } from "../../store/useStore";
+import useLogout from "../../hooks/useLogout";
 
 const Header = () => {
-    const user = useSelector((store) => store.user);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
-    const handleLogout = async () => {
-        const toastId = toast.loading("Loading...");
-        try {
-            const response = await axiosInstance.post("/auth/logout");
-            if (response.data.success) {
-                dispatch(clearUser());
-                dispatch(clearFeed());
-                dispatch(clearConnections());
-                dispatch(clearRequests());
-                navigate("/login", { replace: true });
-                toast.success(response.data.message);
-            }
-        } catch (err) {
-            toast.error(err.message);
-        } finally {
-            toast.dismiss(toastId);
-        }
+    const { user } = useGlobalStore();
+    const { handleLogout } = useLogout();
+    const onLogout = async () => {
+        await handleLogout();
     };
 
     return (
@@ -77,7 +55,7 @@ const Header = () => {
                                         <Link to="/connections">Connections</Link>
                                     </li>
                                     <li>
-                                        <a onClick={handleLogout}>Logout</a>
+                                        <span onClick={onLogout}>Logout</span>
                                     </li>
                                 </div>
                             </ul>

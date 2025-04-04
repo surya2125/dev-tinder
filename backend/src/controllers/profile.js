@@ -1,9 +1,9 @@
-const { AsyncHandler, ErrorHandler } = require("../utils/handlers");
-const { validateEditProfile, validateChangePassword } = require("../utils/validations");
+import { AsyncHandler, ErrorHandler } from "../utils/handlers.js";
+import { validateChangePassword, validateEditProfile } from "../utils/validations.js";
 
 // View profile
 const viewProfile = AsyncHandler(async (req, res, next) => {
-    // Get logged in user data
+    // Get logged in user's data
     const loggedInUser = req.user;
 
     // Remove sensitive data
@@ -20,16 +20,16 @@ const viewProfile = AsyncHandler(async (req, res, next) => {
 // Edit profile
 const editProfile = AsyncHandler(async (req, res, next) => {
     // Get data from request body
-    const userData = req.body;
+    const bodyData = req.body;
 
     // Validation of data
-    validateEditProfile(userData);
+    validateEditProfile(bodyData);
 
-    // Get logged in user data
+    // Get logged in user's data
     const loggedInUser = req.user;
 
-    // Update the user
-    Object.keys(userData).forEach((field) => (loggedInUser[field] = userData[field]));
+    // Edit the user data
+    Object.keys(bodyData).forEach((field) => (loggedInUser[field] = bodyData[field]));
     await loggedInUser.save();
 
     // Remove sensitive data
@@ -38,7 +38,7 @@ const editProfile = AsyncHandler(async (req, res, next) => {
     // Return the response
     res.status(200).json({
         success: true,
-        message: "Updated user profile successfully",
+        message: "Updated profile successfully",
         data: loggedInUser
     });
 });
@@ -48,11 +48,11 @@ const changePassword = AsyncHandler(async (req, res, next) => {
     // Get data from request body
     const { oldPassword, newPassword } = req.body;
 
-    // Get logged in user data
-    const loggedInUser = req.user;
-
     // Validation of data
     validateChangePassword(req.body);
+
+    // Get logged in user's data
+    const loggedInUser = req.user;
 
     // Validate the old password
     const isValidPassword = await loggedInUser.validatePassword(oldPassword);
@@ -71,4 +71,4 @@ const changePassword = AsyncHandler(async (req, res, next) => {
     });
 });
 
-module.exports = { viewProfile, editProfile, changePassword };
+export { viewProfile, editProfile, changePassword };

@@ -1,26 +1,23 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
-const { ErrorHandler } = require("../utils/handlers");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../config/config");
+import mongoose from "mongoose";
+import validator from "validator";
+import { ErrorHandler } from "../utils/handlers.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "../config/config.js";
 
 const userSchema = new mongoose.Schema(
     {
         name: {
             type: String,
-            trim: true,
             required: [true, "Please provide a name"],
-            minLength: [6, "Name must be at least 6 characters"],
-            maxLength: [50, "Name must not exceed 50 characters"]
+            trim: true
         },
         email: {
             type: String,
-            trim: true,
             required: [true, "Please provide an email address"],
+            lowercase: true,
             unique: [true, "User already exists"],
             trim: true,
-            lowercase: true,
             validate: function (value) {
                 if (!validator.isEmail(value)) {
                     throw new ErrorHandler("Please provide a valid email address", 400);
@@ -29,10 +26,10 @@ const userSchema = new mongoose.Schema(
         },
         password: {
             type: String,
-            trim: true,
             required: [true, "Please provide a password"],
+            trim: true,
             validate: function (value) {
-                if (!validator.isStrongPassword(value, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 })) {
+                if (!validator.isStrongPassword(value, { minLength: 8, minUppercase: 1, minLowercase: 1, minNumbers: 1, minSymbols: 1 })) {
                     throw new ErrorHandler(
                         "Password must be at least 8 characters long and includes at least one uppercase character, one lowercase character, one number and one symbol",
                         400
@@ -43,22 +40,24 @@ const userSchema = new mongoose.Schema(
         gender: {
             type: String,
             enum: {
-                values: ["male", "female", "others"],
+                values: ["male", "female"],
                 message: `{VALUE} is not a valid gender type`
             },
+            required: [true, "Please provide the gender"],
             trim: true
         },
         age: {
             type: Number,
-            min: [18, "Age must be at least 18 years old"]
-        },
-        about: {
-            type: String,
-            default: `This is a default about section`,
-            trim: true
+            required: [true, "Please provide the age"],
+            min: [18, "You must be at least 18 years old"]
         },
         skills: {
             type: [String],
+            trim: true
+        },
+        about: {
+            type: String,
+            default: "This is the default about section",
             trim: true
         },
         photoUrl: {
@@ -89,17 +88,18 @@ userSchema.methods.validatePassword = async function (password) {
 };
 
 // Generate jwt
-userSchema.methods.generateJWT = function () {
-    return jwt.sign(
+userSchema.methods.generateJwt = function () {
+    const token = jwt.sign(
         {
             _id: this._id
         },
         JWT_SECRET,
         {
+            issuer: "devtinder",
             expiresIn: "7d"
         }
     );
+    return token;
 };
 
-const UserModel = mongoose.model("User", userSchema);
-module.exports = UserModel;
+export const UserModel = mongoose.model("User", userSchema);

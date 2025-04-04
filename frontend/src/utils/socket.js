@@ -8,9 +8,5 @@ export const connectSocket = () => {
         reconnectionDelay: 1000
     });
 
-    socket.on("connect_error", (error) => {
-        console.error("Socket connection error:", error);
-    });
-
     return socket;
 };

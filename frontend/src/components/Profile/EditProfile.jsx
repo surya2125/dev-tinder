@@ -1,21 +1,15 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { EditProfileSchema } from "../../schemas/profileSchema";
-import { useState } from "react";
-import { axiosInstance } from "../../utils/axiosInstance";
-import toast from "react-hot-toast";
-import { AxiosError } from "axios";
 import ToolTipMessage from "../Common/ToolTipMessage";
-import { useDispatch } from "react-redux";
-import { addUser } from "../../store/slices/userSlice";
+import useEditProfile from "../../hooks/useEditProfile";
 
 const EditProfile = ({ user }) => {
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const dispatch = useDispatch();
-
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors, isValid }
     } = useForm({
         resolver: yupResolver(EditProfileSchema),
@@ -26,29 +20,25 @@ const EditProfile = ({ user }) => {
             gender: user?.gender,
             age: user?.age,
             about: user?.about,
-            photoUrl: user?.photoUrl
+            photoUrl: user?.photoUrl,
+            skills: user?.skills || [],
+            skillsInput: user?.skills ? user?.skills.join(", ") : ""
         }
     });
 
-    const onSubmit = async (data) => {
-        setIsSubmitting(true);
-        const toastId = toast.loading("Loading...");
-        const { name, email, ...editData } = data;
+    const handleSkillsChange = (e) => {
+        const skillsInput = e.target.value;
+        const skillsArray = skillsInput
+            .split(",")
+            .map((skill) => skill.trim())
+            .filter((skill) => skill != "");
+        setValue("skills", skillsArray, { shouldValidate: true });
+    };
 
-        try {
-            const response = await axiosInstance.patch("/profile/edit", editData);
-            if (response.data.success) {
-                toast.success(response.data.message);
-                dispatch(addUser(response.data.data));
-            }
-        } catch (err) {
-            if (err instanceof AxiosError) {
-                toast.error(err.response.data.message);
-            }
-        } finally {
-            setIsSubmitting(false);
-            toast.dismiss(toastId);
-        }
+    const { isLoading, handleEditProfile } = useEditProfile();
+
+    const onSubmit = async (data) => {
+        await handleEditProfile(data);
     };
 
     return (
@@ -164,6 +154,27 @@ const EditProfile = ({ user }) => {
                         </div>
                     </div>
 
+                    {/* Skills */}
+                    <div className="form-control w-full space-y-1">
+                        <label className="label">
+                            <span className="label-text">Skills (Enter up to 5 skills, separated by commas)</span>
+                        </label>
+                        <div className="relative">
+                            <input
+                                type="text"
+                                {...register("skillsInput")}
+                                onChange={handleSkillsChange}
+                                placeholder="React, Node.js, MongoDB, etc."
+                                className={`input input-bordered w-full h-12 focus:outline-0 focus-within:outline-0 ${errors?.skills && "border-red-500"}`}
+                            />
+                            {errors?.skills && <ToolTipMessage message={errors.skills.message} />}
+                        </div>
+                        <input
+                            type="hidden"
+                            {...register("skills")}
+                        />
+                    </div>
+
                     {/* About */}
                     <div className="form-control w-full space-y-1">
                         <label className="label">
@@ -182,9 +193,16 @@ const EditProfile = ({ user }) => {
                     <div className="card-actions justify-end mt-6">
                         <button
                             type="submit"
-                            disabled={!isValid || isSubmitting}
+                            disabled={!isValid || isLoading}
                             className="btn btn-primary min-w-[120px]">
-                            Save Changes
+                            {isLoading ? (
+                                <div className="flex items-center gap-2">
+                                    <AiOutlineLoading3Quarters className="animate animate-spin text-lg" />
+                                    Saving...
+                                </div>
+                            ) : (
+                                "Save Changes"
+                            )}
                         </button>
                     </div>
                 </form>

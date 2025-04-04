@@ -1,52 +1,52 @@
-const { AsyncHandler } = require("../utils/handlers");
-const ConnectionRequestModel = require("../models/connectionRequest");
-const UserModel = require("../models/user");
+import { ConnectionRequestModel } from "../models/connectionRequest.js";
+import { UserModel } from "../models/user.js";
+import { AsyncHandler } from "../utils/handlers.js";
 
-const USER_SAFE_DATA = "name photoUrl age gender about skills";
+const USER_SAFE_DATA = "name gender age photoUrl about skills";
 
-// Connection requests received
-const connectionRequestsReceived = AsyncHandler(async (req, res, next) => {
-    // Get logged in user data
+// Received connection requests
+const receivedConnectionRequests = AsyncHandler(async (req, res, next) => {
+    // Get logged in user's data
     const loggedInUser = req.user;
 
-    // Get all the connection requests received by the user
-    const allConnectionRequestsReceived = await ConnectionRequestModel.find({
-        status: "interested",
-        toUserId: loggedInUser._id
+    // Get all the connection requests received
+    const connectionRequestsReceived = await ConnectionRequestModel.find({
+        receiverId: loggedInUser._id,
+        status: "interested"
     })
-        .select("fromUserId")
-        .populate({ path: "fromUserId", select: USER_SAFE_DATA });
+        .select("senderId")
+        .populate({ path: "senderId", select: USER_SAFE_DATA });
 
     // Return the response
     res.status(200).json({
         success: true,
-        message: "Fetched all connection requests received successfully",
-        data: allConnectionRequestsReceived
+        message: "Fetched connection requests received successfully",
+        data: connectionRequestsReceived
     });
 });
 
 // All Connections
 const allConnections = AsyncHandler(async (req, res, next) => {
-    // Get logged in user data
+    // Get logged in user's data
     const loggedInUser = req.user;
 
-    // Get all the connections of the user
+    // Get all the connections
     const allConnections = await ConnectionRequestModel.find({
         $or: [
-            { fromUserId: loggedInUser._id, status: "accepted" },
-            { toUserId: loggedInUser._id, status: "accepted" }
+            { senderId: loggedInUser._id, status: "accepted" },
+            { receiverId: loggedInUser._id, status: "accepted" }
         ]
     }).populate([
-        { path: "fromUserId", select: USER_SAFE_DATA },
-        { path: "toUserId", select: USER_SAFE_DATA }
+        { path: "senderId", select: USER_SAFE_DATA },
+        { path: "receiverId", select: USER_SAFE_DATA }
     ]);
 
-    // Get only the connections data
+    // Get all the connections data in structured way
     const allConnectionsData = allConnections.map((connection) => {
-        if (String(connection.fromUserId._id) === String(loggedInUser._id)) {
-            return connection.toUserId;
+        if (String(connection.senderId._id) === String(loggedInUser._id)) {
+            return connection.receiverId;
         } else {
-            return connection.fromUserId;
+            return connection.senderId;
         }
     });
 
@@ -58,27 +58,24 @@ const allConnections = AsyncHandler(async (req, res, next) => {
     });
 });
 
-// Users Feed
-const feed = AsyncHandler(async (req, res, next) => {
-    // Get logged in user data
+// Feed
+const userFeed = AsyncHandler(async (req, res, next) => {
+    // Get logged in user's data
     const loggedInUser = req.user;
 
-    // Get all the connection requests of the user
+    // Get all the connections made by the user
     const allConnections = await ConnectionRequestModel.find({
-        $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }]
-    }).populate([
-        { path: "fromUserId", select: USER_SAFE_DATA },
-        { path: "toUserId", select: USER_SAFE_DATA }
-    ]);
-
-    // Filter out all the unique users to hide from feed
-    const usersToHideFromFeed = new Set();
-    allConnections.forEach((connection) => {
-        usersToHideFromFeed.add(connection.fromUserId._id.toString());
-        usersToHideFromFeed.add(connection.toUserId._id.toString());
+        $or: [{ senderId: loggedInUser._id }, { receiverId: loggedInUser._id }]
     });
 
-    // Show all the users that are not on the list
+    // Filter out the users to hide from the feed
+    const usersToHideFromFeed = new Set();
+    allConnections.forEach((connection) => {
+        usersToHideFromFeed.add(connection.senderId._id.toString());
+        usersToHideFromFeed.add(connection.receiverId._id.toString());
+    });
+
+    // Get all the users except for the ones to hide from feed
     const usersToBeShownOnFeed = await UserModel.find({
         $and: [{ _id: { $nin: Array.from(usersToHideFromFeed) } }, { _id: { $ne: loggedInUser._id } }]
     }).select(USER_SAFE_DATA);
@@ -91,4 +88,4 @@ const feed = AsyncHandler(async (req, res, next) => {
     });
 });
 
-module.exports = { connectionRequestsReceived, allConnections, feed };
+export { receivedConnectionRequests, allConnections, userFeed };

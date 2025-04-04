@@ -1,8 +1,8 @@
 import { Navigate } from "react-router";
-import { useSelector } from "react-redux";
+import { useGlobalStore } from "../../store/useStore";
 
 const ProtectedRoute = ({ children }) => {
-    const user = useSelector((store) => store.user);
+    const { user } = useGlobalStore();
     if (!user) {
         return (
             <Navigate

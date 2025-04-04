@@ -12,4 +12,4 @@ class ErrorHandler extends Error {
     }
 }
 
-module.exports = { AsyncHandler, ErrorHandler };
+export { AsyncHandler, ErrorHandler };

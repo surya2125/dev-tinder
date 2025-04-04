@@ -1,17 +1,17 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router";
-import ProtectedRoute from "./components/ProtectedRoute";
-import PublicRoute from "./components/PublicRoute";
 import Loader from "./components/Common/Loader";
+import PublicRoute from "./components/Routes/PublicRoute";
+import ProtectedRoute from "./components/Routes/ProtectedRoute";
 
-const Body = lazy(() => import("./components/Body"));
+const Body = lazy(() => import("./components/Common/Body"));
 const Home = lazy(() => import("./pages/Home"));
-const Feed = lazy(() => import("./pages/Feed"));
-const Profile = lazy(() => import("./pages/Profile"));
-const Connections = lazy(() => import("./pages/Connections"));
-const Requests = lazy(() => import("./pages/Requests"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
+const Feed = lazy(() => import("./pages/Feed"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Requests = lazy(() => import("./pages/Requests"));
+const Connections = lazy(() => import("./pages/Connections"));
 const Chat = lazy(() => import("./pages/Chat"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -27,6 +27,22 @@ const App = () => {
                         element={
                             <PublicRoute>
                                 <Home />
+                            </PublicRoute>
+                        }
+                    />
+                    <Route
+                        path="/login"
+                        element={
+                            <PublicRoute>
+                                <Login />
+                            </PublicRoute>
+                        }
+                    />
+                    <Route
+                        path="/signup"
+                        element={
+                            <PublicRoute>
+                                <Signup />
                             </PublicRoute>
                         }
                     />
@@ -47,14 +63,6 @@ const App = () => {
                         }
                     />
                     <Route
-                        path="/connections"
-                        element={
-                            <ProtectedRoute>
-                                <Connections />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
                         path="/requests"
                         element={
                             <ProtectedRoute>
@@ -63,19 +71,11 @@ const App = () => {
                         }
                     />
                     <Route
-                        path="/login"
+                        path="/connections"
                         element={
-                            <PublicRoute>
-                                <Login />
-                            </PublicRoute>
-                        }
-                    />
-                    <Route
-                        path="/signup"
-                        element={
-                            <PublicRoute>
-                                <Signup />
-                            </PublicRoute>
+                            <ProtectedRoute>
+                                <Connections />
+                            </ProtectedRoute>
                         }
                     />
                     <Route

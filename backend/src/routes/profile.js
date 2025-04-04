@@ -1,10 +1,10 @@
-const { Router } = require("express");
-const { viewProfile, editProfile, changePassword } = require("../controllers/profile");
-const { userAuth } = require("../middlewares/auth");
+import { Router } from "express";
+import { userAuth } from "../middlewares/auth.js";
+import { changePassword, editProfile, viewProfile } from "../controllers/profile.js";
 
 const profileRouter = Router();
 profileRouter.get("/view", userAuth, viewProfile);
 profileRouter.patch("/edit", userAuth, editProfile);
 profileRouter.put("/password", userAuth, changePassword);
 
-module.exports = profileRouter;
+export default profileRouter;

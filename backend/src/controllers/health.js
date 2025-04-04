@@ -7,4 +7,4 @@ const basicHealthStatus = (req, res) => {
     });
 };
 
-module.exports = { basicHealthStatus };
+export { basicHealthStatus };

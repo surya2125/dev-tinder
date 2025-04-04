@@ -1,21 +1,15 @@
-const app = require("./app");
-const { PORT } = require("./config/config");
-const connectMongoDB = require("./utils/mongodb");
-const http = require("http");
-const { connectSocket } = require("./utils/socket");
+import app from "./app.js";
+import { PORT } from "./config/config.js";
+import { connectMongoDB } from "./utils/mongodb.js";
 
-const server = http.createServer(app);
-// Connection to socket
-connectSocket(server);
-
-// Connection to database
+// Connecting to mongodb
 connectMongoDB()
     .then(() => {
-        // Connection to server
-        server.listen(PORT, () => {
-            console.log(`Server started on PORT ${PORT}`);
+        // Connecting to server
+        app.listen(PORT, () => {
+            console.log(`Server running on PORT ${PORT}`);
         });
     })
     .catch((err) => {
-        console.error(err.message);
+        console.log(err.message);
     });

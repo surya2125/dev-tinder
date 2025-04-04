@@ -1,14 +1,12 @@
-const mongoose = require("mongoose");
-const { MONGODB_URL } = require("../config/config");
+import mongoose from "mongoose";
+import { MONGODB_URL } from "../config/config.js";
 
-const connectMongoDB = async () => {
+export const connectMongoDB = async () => {
     try {
         await mongoose.connect(MONGODB_URL, { dbName: "devtinder" });
         console.log("MongoDB is connected successfully");
     } catch (err) {
-        console.error(err.message);
+        console.error("Error while connecting to mongodb:", err.message);
         process.exit(1);
     }
 };
-
-module.exports = connectMongoDB;

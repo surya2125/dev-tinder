@@ -1,19 +1,15 @@
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SignupSchema } from "../schemas/authSchema";
 import ToolTipMessage from "../components/Common/ToolTipMessage";
-import toast from "react-hot-toast";
-import { AxiosError } from "axios";
-import { axiosInstance } from "../utils/axiosInstance";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import useSignup from "../hooks/useSignup";
 
 const Signup = () => {
-    const [isSubmitting, setIsSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState("");
-    const navigate = useNavigate();
 
     const {
         register,
@@ -22,28 +18,16 @@ const Signup = () => {
         reset
     } = useForm({
         resolver: yupResolver(SignupSchema),
+        defaultValues: {
+            gender: "male"
+        },
         mode: "onChange"
     });
 
-    const onSubmit = async (data) => {
-        setIsSubmitting(true);
-        const toastId = toast.loading("Loading...");
+    const { isLoading, handleSignup } = useSignup(reset);
 
-        try {
-            const response = await axiosInstance.post("/auth/signup", data);
-            if (response.data.success) {
-                toast.success(response.data.message);
-                navigate("/login", { replace: true });
-                reset();
-            }
-        } catch (err) {
-            if (err instanceof AxiosError) {
-                toast.error(err.response.data.message);
-            }
-        } finally {
-            setIsSubmitting(false);
-            toast.dismiss(toastId);
-        }
+    const onSubmit = async (data) => {
+        await handleSignup(data);
     };
 
     return (
@@ -104,6 +88,36 @@ const Signup = () => {
                             </span>
                             {errors?.password && <ToolTipMessage message={errors.password.message} />}
                         </div>
+                        <div className="relative">
+                            <input
+                                type="number"
+                                min={18}
+                                {...register("age")}
+                                placeholder="Age"
+                                className={`input input-bordered w-full h-12 focus:outline-0 focus-within:outline-0 ${errors?.age && "border-red-500"}`}
+                            />
+                            {errors?.age && <ToolTipMessage message={errors.age.message} />}
+                        </div>
+                        <div className="space-x-4">
+                            <label className="label cursor-pointer justify-start gap-2">
+                                <input
+                                    type="radio"
+                                    {...register("gender")}
+                                    className="radio radio-primary"
+                                    value="male"
+                                />
+                                <span className="label-text">Male</span>
+                            </label>
+                            <label className="label cursor-pointer justify-start gap-2">
+                                <input
+                                    type="radio"
+                                    {...register("gender")}
+                                    className="radio radio-primary"
+                                    value="female"
+                                />
+                                <span className="label-text">Female</span>
+                            </label>
+                        </div>
                     </div>
                     <div className="flex items-center flex-col gap-3 my-4">
                         <p className="m-auto cursor-pointer font-light">
@@ -116,9 +130,9 @@ const Signup = () => {
                         </p>
                         <button
                             type="submit"
-                            disabled={!isValid || isSubmitting}
+                            disabled={!isValid || isLoading}
                             className="btn btn-primary w-full h-11">
-                            {isSubmitting ? (
+                            {isLoading ? (
                                 <div className="flex items-center gap-2">
                                     <AiOutlineLoading3Quarters className="animate animate-spin text-lg" />
                                     Processing...

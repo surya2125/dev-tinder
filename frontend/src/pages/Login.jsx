@@ -1,22 +1,14 @@
-import { Link, useNavigate } from "react-router";
-import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useState } from "react";
+import { Link } from "react-router";
 import { useForm } from "react-hook-form";
+import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { LoginSchema } from "../schemas/authSchema";
-import ToolTipMessage from "../components/Common/ToolTipMessage";
-import toast from "react-hot-toast";
-import { AxiosError } from "axios";
-import { axiosInstance } from "../utils/axiosInstance";
-import { useDispatch } from "react-redux";
-import { addUser } from "../store/slices/userSlice";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import ToolTipMessage from "../components/Common/ToolTipMessage";
+import { LoginSchema } from "../schemas/authSchema";
+import useLogin from "../hooks/useLogin";
 
 const Login = () => {
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
     const {
         register,
         handleSubmit,
@@ -27,27 +19,10 @@ const Login = () => {
         mode: "onChange"
     });
     const [showPassword, setShowPassword] = useState("");
+    const { isLoading, handleLogin } = useLogin(reset);
 
     const onSubmit = async (data) => {
-        setIsSubmitting(true);
-        const toastId = toast.loading("Loading...");
-
-        try {
-            const response = await axiosInstance.post("/auth/login", data);
-            if (response.data.success) {
-                toast.success(response.data.message);
-                dispatch(addUser(response.data.data));
-                navigate("/feed", { replace: true });
-                reset();
-            }
-        } catch (err) {
-            if (err instanceof AxiosError) {
-                toast.error(err.response.data.message);
-            }
-        } finally {
-            setIsSubmitting(false);
-            toast.dismiss(toastId);
-        }
+        await handleLogin(data);
     };
 
     return (
@@ -118,9 +93,9 @@ const Login = () => {
                         </p>
                         <button
                             type="submit"
-                            disabled={!isValid || isSubmitting}
+                            disabled={!isValid || isLoading}
                             className=" btn btn-primary w-full h-11">
-                            {isSubmitting ? (
+                            {isLoading ? (
                                 <div className="flex items-center gap-2">
                                     <AiOutlineLoading3Quarters className="animate animate-spin text-lg" />
                                     Processing...

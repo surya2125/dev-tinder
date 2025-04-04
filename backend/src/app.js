@@ -1,16 +1,15 @@
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
-const morgan = require("morgan");
-const { FRONTEND_URL } = require("./config/config");
-const notfoundMiddleware = require("./middlewares/notfound");
-const errorMiddleware = require("./middlewares/error");
-const authRouter = require("./routes/auth");
-const profileRouter = require("./routes/profile");
-const requestRouter = require("./routes/request");
-const userRouter = require("./routes/user");
-const healthRouter = require("./routes/health");
-const chatRouter = require("./routes/chat");
+import express from "express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import { FRONTEND_URL } from "./config/config.js";
+import { errorMiddleware } from "./middlewares/error.js";
+import { notfoundMiddleware } from "./middlewares/notfound.js";
+import authRouter from "./routes/auth.js";
+import profileRouter from "./routes/profile.js";
+import requestRouter from "./routes/request.js";
+import userRouter from "./routes/user.js";
+import healthRouter from "./routes/health.js";
+import messageRouter from "./routes/message.js";
 
 const app = express();
 app.use(express.json());
@@ -18,20 +17,19 @@ app.use(cookieParser());
 app.use(
     cors({
         origin: FRONTEND_URL,
-        methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-        credentials: true
+        credentials: true,
+        methods: ["GET", "POST", "PATCH", "PUT"]
     })
 );
-app.use(morgan("dev"));
 
 app.use("/api/auth", authRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/request", requestRouter);
 app.use("/api/user", userRouter);
-app.use("/api/chat", chatRouter);
 app.use("/api/health", healthRouter);
+app.use("/api/message", messageRouter);
 
 app.use(errorMiddleware);
 app.use("*", notfoundMiddleware);
 
-module.exports = app;
+export default app;

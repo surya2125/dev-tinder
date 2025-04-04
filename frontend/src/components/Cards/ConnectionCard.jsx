@@ -1,6 +1,6 @@
 import { Link } from "react-router";
-import { truncateString } from "../utils/truncateString";
 import { LuMessageSquareText } from "react-icons/lu";
+import { truncateString } from "../../utils/truncateString";
 
 const ConnectionCard = ({ connection }) => {
     const { _id: userId, photoUrl, name, about } = connection;

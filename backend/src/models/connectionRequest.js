@@ -1,34 +1,28 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const connectionRequestSchema = new mongoose.Schema(
     {
-        fromUserId: {
+        senderId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
-            required: [true, "Please provide the sender id"],
-            trim: true
+            required: [true, "Please provide the sender id"]
         },
-        toUserId: {
+        receiverId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
-            required: [true, "Please provide the received id"],
-            trim: true
+            required: [true, "Please provide the receiver id"]
         },
         status: {
             type: String,
+            required: [true, "Please provide the status"],
             enum: {
-                values: ["ignored", "interested", "accepted", "rejected"],
+                values: ["interested", "ignored", "accepted", "rejected"],
                 message: `{VALUE} is not a valid status type`
             },
-            trim: true,
-            lowercase: true
+            trim: true
         }
     },
     { timestamps: true, versionKey: false }
 );
 
-// Compound indexing
-connectionRequestSchema.index({ fromUserId: 1, toUserId: 1 });
-
-const ConnectionRequestModel = mongoose.model("Connection Request", connectionRequestSchema);
-module.exports = ConnectionRequestModel;
+export const ConnectionRequestModel = mongoose.model("Connection Request", connectionRequestSchema);

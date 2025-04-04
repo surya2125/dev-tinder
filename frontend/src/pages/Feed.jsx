@@ -1,30 +1,10 @@
-import { useDispatch, useSelector } from "react-redux";
-import { axiosInstance } from "../utils/axiosInstance";
-import { AxiosError } from "axios";
-import { useEffect } from "react";
-import { addFeed } from "../store/slices/feedSlice";
-import UserCard from "../components/UserCard";
+import UserCard from "../components/Cards/UserCard";
+import useGetFeed from "../hooks/useGetFeed";
+import { useGlobalStore } from "../store/useStore";
 
 const Feed = () => {
-    const dispatch = useDispatch();
-    const feed = useSelector((store) => store.feed);
-
-    const getFeed = async () => {
-        try {
-            const response = await axiosInstance.get("/user/feed");
-            if (response.data.success) {
-                dispatch(addFeed(response.data.data));
-            }
-        } catch (err) {
-            if (err instanceof AxiosError) {
-                console.error(err.response.data.message);
-            }
-        }
-    };
-
-    useEffect(() => {
-        getFeed();
-    }, [dispatch]);
+    useGetFeed();
+    const { feed } = useGlobalStore();
 
     return (
         <div className="flex-1 pt-24 px-5 pb-10 flex flex-col items-center justify-center overflow-hidden">
@@ -32,7 +12,8 @@ const Feed = () => {
                 <div className="text-center">
                     <h2 className="sm:text-3xl text-2xl font-bold">No New Users Found!</h2>
                     <img
-                        src="/assets/not-found.svg"
+                        loading="lazy"
+                        src="/assets/empty-feed.svg"
                         alt="user-not-found"
                         className="block mx-auto w-96"
                     />
