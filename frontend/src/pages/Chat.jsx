@@ -7,12 +7,10 @@ import useGetMessages from "../hooks/useGetMessages";
 import { useGlobalStore } from "../store/useStore";
 import Message from "../components/Chat/Message";
 import useSendMessage from "../hooks/useSendMessage";
+import { useEffect, useRef } from "react";
+import useListenMessages from "../hooks/useListenMessages";
 
 const Chat = () => {
-    const { userId } = useParams();
-    useGetMessages(userId);
-    const { messages } = useGlobalStore();
-
     const {
         register,
         handleSubmit,
@@ -23,31 +21,52 @@ const Chat = () => {
         mode: "onChange"
     });
 
+    const { userId } = useParams();
+    const { messages } = useGlobalStore();
+    useGetMessages(userId);
+    useListenMessages();
+
+    const lastMessageRef = useRef();
+    useEffect(() => {
+        setTimeout(() => {
+            lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+    }, [messages]);
+
     const { isLoading, handleSendMessage } = useSendMessage(reset, userId);
+
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault(); // Prevent default behavior (new line)
+            handleSubmit(onSubmit)(); // Submit the form
+        }
+    };
 
     const onSubmit = async ({ message }) => {
         await handleSendMessage(message);
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-full min-h-screen mt-10 px-3 py-6 sm:px-5">
-            <div className="w-full max-w-3xl bg-base-100 h-[80vh] sm:h-[85vh] p-3 rounded-md flex flex-col justify-between shadow-lg">
-                <div className="flex-1 overflow-y-auto pt-4 pb-4 mb-3 px-3 space-y-3">
+        <div className="mt-10 flex-1  flex items-center justify-center">
+            <div className="bg-base-100 p-3 rounded-md shadow-lg max-w-xl w-full">
+                <div className="pt-4 pb-4 mb-3 px-3 space-y-3 h-[50vh] overflow-y-auto">
                     {messages?.map((message) => (
-                        <Message
+                        <div
                             key={message._id}
-                            message={message}
-                        />
+                            ref={lastMessageRef}>
+                            <Message message={message} />
+                        </div>
                     ))}
                 </div>
                 <form
                     noValidate
                     onSubmit={handleSubmit(onSubmit)}
-                    className="relative h-[20%]">
+                    className="relative h-[20vh]">
                     <textarea
                         type="text"
                         placeholder="Write a message..."
                         {...register("message")}
+                        onKeyDown={handleKeyDown}
                         className="textarea resize-none w-full h-full p-2 sm:p-3 rounded-md border border-gray-300 focus:outline-none focus:border-primary"></textarea>
                     <button
                         disabled={!isValid || isLoading}

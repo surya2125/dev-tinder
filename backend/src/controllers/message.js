@@ -3,6 +3,7 @@ import { MessageModel } from "../models/message.js";
 import { ConnectionRequestModel } from "../models/connectionRequest.js";
 import { UserModel } from "../models/user.js";
 import { AsyncHandler, ErrorHandler } from "../utils/handlers.js";
+import { getReceiverSocketId, io } from "../index.js";
 
 // Send message
 const sendMessage = AsyncHandler(async (req, res, next) => {
@@ -63,6 +64,11 @@ const sendMessage = AsyncHandler(async (req, res, next) => {
         { path: "senderId", select: "name photoUrl" },
         { path: "receiverId", select: "name photoUrl" }
     ]);
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+        io.to(receiverSocketId).emit("newMessage", newMessageData);
+    }
 
     // Return the response
     res.status(201).json({
