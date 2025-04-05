@@ -40,7 +40,7 @@ const useConnectSocket = (userId) => {
 
         socket.on("messageReceived", (newMessage) => {
             updateMessages(newMessage);
-            if (!recentlyPlayed.current) {
+            if (!recentlyPlayed.current && newMessage?.senderId?._id !== user?._id) {
                 const sound = new Audio(notificationSound);
                 sound.play();
                 recentlyPlayed.current = true;
@@ -60,3 +60,4 @@ const useConnectSocket = (userId) => {
 };
 
 export default useConnectSocket;
+

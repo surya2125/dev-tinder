@@ -25,23 +25,19 @@ const UserCard = ({ user }) => {
                 </div>
                 <div className="p-4 bg-base-200 flex flex-col justify-between flex-grow">
                     <div>
-                        <h2 className="card-title text-lg sm:text-xl font-semibold mb-2">{name}</h2>
-                        {age && gender ? (
-                            <p className="text-sm sm:text-base text-gray-600 mb-2">{age + ", " + gender}</p>
-                        ) : (
-                            <p className="text-sm sm:text-base text-gray-400 mb-2">Age/Gender not available</p>
-                        )}
-                        <p className="text-gray-300 text-sm sm:text-base mt-3">{truncateString(about, 50) || "No description available"}</p>
+                        <h2 className="text-lg sm:text-xl font-semibold">{name}</h2>
+                        <p className="text-sm sm:text-base text-gray-600 sm:mt-1 mb-2">{age + ", " + gender}</p>
+                        <p className="text-gray-300 text-sm sm:text-base">{truncateString(about, 50) || "No description available"}</p>
                     </div>
-                    <div className="card-actions flex justify-between space-x-2 mt-4">
+                    <div className="card-actions hidden sm:flex justify-between space-x-2 mt-4">
                         <button
                             onClick={() => handleSendRequest("ignored")}
-                            className="btn btn-error btn-sm sm:btn-md flex-1">
+                            className="btn btn-error btn-sm sm:btn-md flex-1 relative z-[1]">
                             Ignore
                         </button>
                         <button
                             onClick={() => handleSendRequest("interested")}
-                            className="btn btn-primary btn-sm sm:btn-md flex-1">
+                            className="btn btn-primary btn-sm sm:btn-md flex-1 relative z-[1]">
                             Interested
                         </button>
                     </div>

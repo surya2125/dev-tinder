@@ -2,7 +2,6 @@ import { useGlobalStore } from "../../store/useStore";
 
 const Message = ({ message }) => {
     const { user } = useGlobalStore();
-
     const fromMe = user?._id === message?.senderId?._id;
     const chatClassName = fromMe ? "chat-end" : "chat-start";
     const photoUrl = fromMe ? user?.photoUrl : message?.senderId?.photoUrl;

@@ -6,7 +6,7 @@ import { useGlobalStore } from "../store/useStore";
 
 const useLogout = () => {
     const navigate = useNavigate();
-    const { clearUser } = useGlobalStore();
+    const { clearUser, clearFeed, clearRequests, clearConnections, clearMessages } = useGlobalStore();
 
     const handleLogout = async () => {
         const toastId = toast.loading("Loading...");
@@ -14,6 +14,10 @@ const useLogout = () => {
             const response = await axiosInstance.post("/auth/logout");
             if (response.data.success) {
                 clearUser();
+                clearFeed();
+                clearRequests();
+                clearConnections();
+                clearMessages();
                 navigate("/login", { replace: true });
                 toast.success(response.data.message);
             }
