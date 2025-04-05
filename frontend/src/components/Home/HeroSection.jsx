@@ -3,7 +3,7 @@ import { FaArrowRight } from "react-icons/fa6";
 
 const HeroSection = () => {
     return (
-        <section className="py-16">
+        <section className="py-10">
             <div className="flex lg:flex-row lg:gap-0 gap-7 flex-col items-center justify-center container mx-auto">
                 <div className="flex-1 space-y-3">
                     <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">Connect with developers who match your vibe</h1>

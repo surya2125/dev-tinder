@@ -26,7 +26,7 @@ const Login = () => {
     };
 
     return (
-        <div className="h-full flex gap-10 items-center justify-center flex-1 sm:my-24">
+        <div className="h-full flex flex-1 gap-10 items-center justify-center">
             <div className="lg:block hidden">
                 <img
                     src="/assets/login.jpg"

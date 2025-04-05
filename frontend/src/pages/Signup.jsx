@@ -31,7 +31,7 @@ const Signup = () => {
     };
 
     return (
-        <div className="h-full flex gap-10 items-center justify-center flex-1 sm:my-24">
+        <div className="h-full flex flex-1 gap-10 items-center justify-center py-3 sm:py-0">
             <div className="lg:block hidden">
                 <img
                     src="/assets/signup.jpg"

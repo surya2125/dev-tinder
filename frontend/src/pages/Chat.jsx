@@ -1,5 +1,4 @@
 import { useParams } from "react-router";
-import { IoMdSend } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { chatSchema } from "../schemas/chatSchema";
@@ -8,6 +7,7 @@ import useGetMessages from "../hooks/useGetMessages";
 import useConnectSocket from "../hooks/useConnectSocket";
 import Messages from "../components/Chat/Messages";
 import Loader from "../components/Common/Loader";
+import { LuSend } from "react-icons/lu";
 
 const Chat = () => {
     const { user } = useGlobalStore();
@@ -19,18 +19,11 @@ const Chat = () => {
         register,
         handleSubmit,
         reset,
-        formState: { isValid }
+        formState: { isValid, errors }
     } = useForm({
         resolver: yupResolver(chatSchema),
         mode: "onChange"
     });
-
-    const handleKeyDown = (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            handleSubmit(onSubmit)();
-        }
-    };
 
     const onSubmit = ({ message }) => {
         socket?.emit("sendMessage", { senderId: user?._id, receiverId: userId, message });
@@ -40,24 +33,26 @@ const Chat = () => {
     if (isLoading) return <Loader />;
 
     return (
-        <div className="mt-20 mb-10 flex-1 flex items-center justify-center px-3">
-            <div className="bg-base-100 p-2 pb-3 rounded-md shadow-lg max-w-xl w-full">
+        <div className="flex-1 flex items-center justify-center px-2 my-5">
+            <div className="bg-base-100 p-3 pb-3 rounded-md shadow-lg max-w-xl w-full">
                 <Messages />
                 <form
                     noValidate
                     onSubmit={handleSubmit(onSubmit)}
-                    className="relative h-32">
-                    <textarea
-                        type="text"
-                        placeholder="Write a message..."
-                        {...register("message")}
-                        onKeyDown={handleKeyDown}
-                        className="textarea resize-none w-full h-full p-2 sm:p-3 rounded-md border border-gray-300 focus:outline-none focus:border-primary"></textarea>
+                    className="flex items-center justify-center gap-3">
+                    <div className="w-full relative">
+                        <input
+                            type="text"
+                            placeholder="Write a message..."
+                            className={`input rounded-md border border-gray-300 focus:outline-none focus:border-primary w-full h-11 ${errors?.message && "border-red-500 focus:border-red-500"}`}
+                            {...register("message")}
+                        />
+                    </div>
                     <button
-                        disabled={!isValid}
                         type="submit"
-                        className="btn btn-primary absolute top-3 right-3 text-lg h-8 p-2">
-                        <IoMdSend />
+                        disabled={!isValid}
+                        className="bg-primary disabled:bg-primary/80 p-3 flex items-center justify-center rounded-full">
+                        <LuSend />
                     </button>
                 </form>
             </div>

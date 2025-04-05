@@ -9,35 +9,33 @@ const UserCard = ({ user }) => {
     return (
         <TinderCard
             onSwipe={handleSwipe}
-            className="user-card h-full w-full max-w-md mx-auto sm:w-96 overflow-hidden border border-gray-200 rounded-lg cursor-grab active:cursor-grab"
+            className="user-card max-w-sm border border-gray-200 rounded-lg overflow-hidden cursor-grab active:cursor-grab"
             swipeRequirementType="position"
             swipeThreshold={100}
             preventSwipe={["up", "down"]}>
-            <div className="card h-full flex flex-col">
-                <div className="aspect-square w-full relative">
-                    <img
-                        src={photoUrl}
-                        draggable="false"
-                        loading="lazy"
-                        className="absolute inset-0 w-full h-full object-cover rounded-t-lg"
-                        alt="user"
-                    />
-                </div>
-                <div className="p-4 bg-base-200 flex flex-col justify-between flex-grow">
+            <div className="flex flex-col h-full">
+                <img
+                    src={photoUrl}
+                    draggable="false"
+                    loading="lazy"
+                    className="h-[60%] w-full object-cover"
+                    alt="user"
+                />
+                <div className="p-4 bg-base-200 flex flex-col justify-between h-[40%]">
                     <div>
                         <h2 className="text-lg sm:text-xl font-semibold">{name}</h2>
-                        <p className="text-sm sm:text-base text-gray-600 sm:mt-1 mb-2">{age + ", " + gender}</p>
+                        <p className="text-sm sm:text-base text-gray-600 sm:mt-1 mb-2">{`${age}, ${gender}`}</p>
                         <p className="text-gray-300 text-sm sm:text-base">{truncateString(about, 50) || "No description available"}</p>
                     </div>
                     <div className="card-actions hidden sm:flex justify-between space-x-2 mt-4">
                         <button
                             onClick={() => handleSendRequest("ignored")}
-                            className="btn btn-error btn-sm sm:btn-md flex-1 relative z-[1]">
+                            className="btn btn-error btn-sm sm:btn-md flex-1">
                             Ignore
                         </button>
                         <button
                             onClick={() => handleSendRequest("interested")}
-                            className="btn btn-primary btn-sm sm:btn-md flex-1 relative z-[1]">
+                            className="btn btn-primary btn-sm sm:btn-md flex-1">
                             Interested
                         </button>
                     </div>

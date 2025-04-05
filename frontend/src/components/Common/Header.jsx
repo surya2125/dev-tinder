@@ -11,13 +11,13 @@ const Header = () => {
     };
 
     return (
-        <header className="min-h-16 px-5 fixed top-0 left-0 right-0 w-full z-50 bg-color-1 shadow-md shadow-primary/30">
+        <header className="min-h-16 px-3 sm:px-5 w-full bg-color-1 shadow-md shadow-primary/30">
             <div className="navbar container mx-auto">
                 <div className="flex-1">
                     <Link
                         to="/"
-                        className="flex items-center gap-2 font-bold text-xl">
-                        <FaCode className="h-6 w-6" />
+                        className="flex items-center gap-1 sm:gap-2 font-bold text-lg sm:text-xl">
+                        <FaCode className="w-5 h-5 sm:h-6 sm:w-6" />
                         <span>DevTinder</span>
                     </Link>
                 </div>

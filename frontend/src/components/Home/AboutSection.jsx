@@ -4,7 +4,7 @@ import { FiZap } from "react-icons/fi";
 
 const AboutSection = () => {
     return (
-        <section className="md:py-16">
+        <section className="py-10">
             <div className="container mx-auto">
                 <div className="flex flex-col items-center justify-center space-y-4 text-center">
                     <div className="space-y-2">

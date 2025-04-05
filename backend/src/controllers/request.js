@@ -52,7 +52,7 @@ const sendConnectionRequest = AsyncHandler(async (req, res, next) => {
     // Return the response
     res.status(201).json({
         success: true,
-        message: `Connection request ${status === "interested" ? "sent" : status} successfully`,
+        message: status === "interested" ? "😏 You made a move" : "😶 Hard pass",
         data: connectionRequestData
     });
 });
@@ -91,7 +91,7 @@ const reviewConnectionRequest = AsyncHandler(async (req, res, next) => {
     // Return the response
     res.status(200).json({
         success: true,
-        message: `Connection request ${status} successfully`,
+        message: status === "accepted" ? "🎉 It’s a match" : "😬 Rejected. Keep swiping",
         data: connectionRequestData
     });
 });
