@@ -18,7 +18,7 @@ const Header = () => {
                         to="/"
                         className="flex items-center gap-1 sm:gap-2 font-bold text-lg sm:text-xl">
                         <FaCode className="w-5 h-5 sm:h-6 sm:w-6" />
-                        <span>DevTinder</span>
+                        <span>Tinder</span>
                     </Link>
                 </div>
                 {user ? (
